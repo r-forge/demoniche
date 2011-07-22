@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<!-- This theme is created by Max guedy from AgencyZebra.com and uses jQueryTools (http://flowplayer.org/tools/demos/index.html) as well as reflection.js (http://www.digitalia.be/software/reflectionjs-for-jquery) -->
+
+	<title>demoniche - spatial population dynamics</title>
+	
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="Keywords" content="" />
+	<meta name="Description" content=" Fill in a description full of keywords" />
+	<meta name="Copyright" content="&copy; 2010 Max Guedy" />
+	<meta name="Author" content="Max Guedy" />
+	
+	<!-- Full version of jQuery Tools + jQuery 1.3.2 -->
+	<script src="js/jquery.tools.min.js" type="text/javascript"></script>
+	
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" title="style" charset="utf-8" />
+	
+
+
+</head>
+
+
+
+	<!-- Lets get the party started -->
+
+
+
+<body>
+
+
+<div id="page">
+
+	<div id="header">
+
+<!-- replace the image of my logo with yours-->
+	
+	<h2><a href="http://r-forge.r-project.org/projects/demoniche/"><img src="pics/logo4.png" alt="demoniche"/></a></h2>
+	
+	</div>
+	
+	
+	
+<!-- Here goes the tabs and their content inside a wrapper caled main-->
+
+
+
+	<div id="main"> 
+	 
+		<div id="tabs">
+
+			<ul id="flowtabs" class="css-tabs">
+				
+				
+				<li><a id="t1" href="#download">Introduction</a></li>
+				<li><a id="t2" href="#about">Download</a></li>
+				<li><a id="t3" href="#instructions">Resources</a></li>
+				<li><a id="t4" href="#license">Authors</a></li>
+				
+	
+
+
+			</ul>
+		
+		</div> <!-- /tabs -->
+
+
+
+		<!-- panes -->
+		
+		
+		<div id="flowpanes" class="css-panes">
+		
+		
+				<!-- 1st pane -->
+				
+				
+				<div>
+				
+					
+					<h1>demoniche - spatial population dynamics</h1>
+					
+					<p>demoniche carries out spatially-explicit demographic modelling. The model simulates stochastic and gradual niche changes, to investigate population dynamics and persistence in space and time. demoniche offers the following features:</p>
+				<ul class="small">
+					<li>Transition matrices that represent demographic responses to environmental or human impact scenarios</li>
+					<li>Demographic and environmental stochasticity</li>
+					<li>Temporal trends in environmental suitability of the species niche</li>
+					<li>Long- and short-distance dispersal</li>
+					</ul>
+			<p>demoniche is built in <a href="http://cran.r-project.org/">R</a> and we encourage users to adapt demoniche to their, and their species', specific needs!</p>
+				</div>
+			
+			
+
+
+				<!-- 2nd Pane -->
+				
+				
+				<div>
+					<h1>To download demoniche:</h1>
+					
+					<h2>From R-forge:</h2>
+				<p>Go to: <a href="http://r-forge.r-project.org/projects/demoniche/">http://r-forge.r-project.org/projects/demoniche/</a>.</p>
+					<h2>From R:</h2>
+					
+					<p>type: 
+                    <strong><code>install.packages("demoniche", repos="http://R-Forge.R-project.org")</code></strong></p><p style="font-size:10pt;margin:0px;text-align:right">
+
+
+                   
+				
+				</div>
+				
+				
+				<!-- 3rd Pane -->
+				
+				
+				<div>
+					<h1>Manual</h1>
+					<p>Download the <a href="pics/demoniche_manual.pdf">manual</a> as a pdf</p>
+
+				<p>Download a <a href="pics/Nenzen_poster_polylepis_IBS.pdf">poster</a> created with demoniche</p>
+						
+				</div>
+				
+							<!-- 4th Pane -->
+							
+							
+				<div>
+				<br>
+				<p>demoniche was made by <a href="http://www.catedra.uevora.pt/rui-nabeiro/index.php/rui_nabeiro/Research/Team/Chair/Hedvig-Nenzen">Hedvig Nenzén</a>, together with David Keith and <a href="http://www.ibiochange.mncn.csic.es/people/miguel-araujo">Miguel Araújo</a>.
+				
+				
+				<p>If you have any questions or suggestions, please contact me at hedvig.nenzen/at/gmail.com.</p>			
+				</div>
+			
+			
+			</div>   		<!-- /panes --> 
+
+	</div>		<!-- /main --> 
+
+
+<!-- Start the portfolio section  --> 
+
+	
+	<div id="portfolio" > 	
+	
+	
+		<div id="controls">
+		
+		<!-- "Prev" action --> 
+				
+		<a class="prevPage browse left"></a> 
+ 
+		<!-- "Next" action --> 
+		<a class="nextPage browse right"></a>
+
+	</div>	
+		
+		
+		<!-- The navigation tags are automatically inserted in the navi div --> 
+		
+		
+		<div class="navi"></div>
+
+
+<!-- Portfolio items - just create new divs under "items"- in theory unlimited but don't abuse bandwidth  --> 
+
+
+		<div class="items">
+			
+			<div><img src="pics/schema_demoniche.jpg" alt="schema"/><p class="description">To use demoniche, first run the function 'demoniche_setup' which checks the consistency of the user-supplied information and generates an R object containing the necessary information for modelling. In the 'demoniche_model' function the user specifies if she/he wishes to include effects of the environmental changes and dispersal.</p></div>	
+			
+		<div><img src="pics/mx.png" alt=""/><p class="description">Required demographic information. demoniche uses transition matrices for species to project population sizes. This image shows one transition matrix, made by the <a href=" http://cran.r-project.org/web/packages/popbio/index.html">popbio</a> package.</p></div>
+
+<div><img src="pics/nichevalues.jpg" alt=""/><p class="description">Required geographic information. Demographic projections can be linked to a time-series of geographically distributed niche values that affect the species growth. The Niche values modify the elements of the transition matrix (reproduction, survival or growth) and can be any values that are thought to influence the suitability of the species' niche.</p></div>
+
+<div><img src="pics/sim_res.jpg" alt=""/><p class="description">Results. Summary results in .csv format for all scenario matrices are produced.</p></div>
+			
+<div><img src="pics/EMA.jpeg" alt=""/><p class="description">Results. demoniche automatically creates graphs of the Expected Minimum Abundance (EMA) of each transition matrix treatment scenario. Results from all subpopulations, all years and all repetitions are available and can be modified in R or exported to other formats.</p></div>
+
+			<div><img src="pics/map_Mx4.jpeg" alt=""/><p class="description">Results. Map of populations occupied by the modelled species affected by the Niche values as shown before. The intensity of the color indicates the population size in each grid cell/population. These graphs are automatically generated by the 'demoniche_model' function.</p></div>	
+			
+<div><img src="pics/popsize.jpg" alt=""/><p class="description">Results. demoniche can be used to compare population sizes between, for example, different combinations of environmental and human change. This graph shows that with effects of Niche values (in this example outputs from a Species Distrbution Model) there was a lower predicted population size.</p></div>
+			
+		</div>
+		
+			
+	</div>
+	
+	
+<!-- the footer  --> 	
+	
+	<div class="fix"></div>-	
+	
+	<p class="small">Website by Hedvig with template from <a href="http://agencyzebra.com">AgencyZebra</a>.</p>c
+
+<!-- google analytics!  -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24679700-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</div>
+
+
+<!-- the Javascript triggers - more info on these on the jQuery Tools documentation   (http://flowplayer.org/tools/demos/index.html) --> 
+
+
+		<script type="text/javascript">
+
+
+			$(function() {
+			
+				$("#flowtabs").tabs("#flowpanes > div", {effect: 'fade'}).history();
+				$("#portfolio").scrollable({size: 1}).navigator().mousewheel(200);
+				$("#portfolio img").reflect({height: 0.15, opacity: 0.2});
+	
+			});
+
+
+		</script>
+
+
+
+</body>
+
+</html>

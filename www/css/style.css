@@ -1,0 +1,298 @@
+/* CSS put together by Max Guedy from AgencyZebra.com and based on the jQueryTools css*/
+
+
+/* reset by Eric Meyer http://meyerweb.com/eric/tools/css/reset/reset.css */
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+	}
+
+/* typography  */
+
+#page {
+	
+	font-family: Arial;
+	
+	color: #2E2E2E;
+	letter-spacing: 1px;
+	font-size: 12px; line-height: 160%;
+	}
+
+h1 {
+	
+	color: #403b3b;
+	font-size: 24px;
+	font-weight: 100;
+	margin: 20px 0;
+	padding-top: 30px;
+}
+
+h2 {
+	font-style: normal;
+	font-weight: normal;
+	letter-spacing: 1px;
+	font-size: 16px;
+	}
+
+
+
+
+p { margin: 15px 0;
+    line-height: 180%;
+
+	}
+
+.small { font-size: 10px; letter-spacing: 0;}
+
+
+li {
+list-style-position: inside;
+margin:10px;
+	}
+
+.description {
+	letter-spacing: 0px;
+	color: #f6f6f6;
+	padding: 0px;
+	width: 600px;
+	text-align: center;
+	font-size: 12px;
+	z-index: 0;
+	}
+
+
+a {
+
+	color: #bbb;
+
+	text-decoration: none;
+	font-style: normal;
+	font-weight: normal;
+	}
+
+a:hover {
+	color: #e4edd5;
+	}
+
+a:active {
+	color: #555;
+	}
+
+body {
+	background-color:#458B00;background-repeat: no-repeat;
+	background-position: center 400px;
+	
+	}
+	
+#page {
+
+	margin-left: auto;
+	margin-bottom: 20px;
+	margin-right: auto;
+	margin-top: 20px;
+	width: 1024px;
+	}
+
+
+#header {
+	height: 50px;
+	margin-bottom: 20px;
+	}
+
+
+#logo {
+	padding: 15px;
+	}
+
+
+
+#main {
+	margin-top: 70px;
+	width: 380px;
+	float: left;
+	}
+
+
+ul.css-tabs {  
+ 
+	text-transform: capitalize;  
+	font-size: 13px;  
+	margin:0 !important; 
+	padding:0;	 	
+	}
+
+/* single tab */
+ul.css-tabs li {  
+	border-bottom-width: 1px;  	border-top-width: 1px;  
+	border-style: solid;  
+	border-color: #333;  
+	width: 90px;  
+	clear: none;  
+	float:left;	 
+	padding:0; 
+	margin:0;  
+	list-style-type:none;	
+	}
+
+ul.css-tabs a { 
+
+	font-style: normal; 
+	font-weight: normal; 
+	padding: 10px;
+	border-style: none; 
+	float:left;
+	display:block;	
+	text-decoration:none;	
+	border-bottom:0px;
+	color: #ccc;
+
+	position:relative;	
+	}
+
+ul.css-tabs a:hover {
+	color: #fff;
+	}
+	
+/* selected tab */
+ul.css-tabs a.current {	
+	border-width: 0px;	
+	color: #666;	
+	cursor:default;
+	}
+
+#panes div {
+	clear: both;
+	display:none;		
+	position:absolute;
+	top:20px;
+	left:20px;
+	}
+
+
+#flowpanes {
+	font-style: normal;
+	font-weight: normal;
+	clear: both; margin:10px;	
+	}
+
+
+
+
+
+/* general settings for boh scrollables */
+div.items {	
+	padding: 0px;	
+	margin: 0px;	
+	width:20000em;	
+	position:absolute;
+	clear:both;
+	}
+
+
+/* the thumbnail scrollable */
+#portfolio {
+	width: 600px;
+	height: 580px;
+	position:relative;
+	overflow:hidden;
+	}
+
+#portfolio div.items div {
+	width: 600px;
+	float:left;		
+	}
+
+
+
+
+
+/* position and dimensions of the navigator */
+#controls {
+	right: 0;
+	top: -30px;
+	position: absolute;
+
+	}
+
+
+
+
+.navi {
+
+	padding: 5px;
+	margin:5px ;
+	width: 500px;
+	height: 45px;
+	}
+
+
+/* items inside navigator */
+.navi a {
+	background-position: 0px -20px;
+	background-image: url(img/tag.png);
+	width: 20px;
+	height: 20px;
+	float:left;
+	margin:2px;
+	display:block;
+	font-size:1px; 
+	}
+
+/* mouseover state */
+.navi a:hover {      
+	background-position: 0 -21px;  cursor: pointer;    
+	}
+
+/* active state (current page state) */
+.navi a.active {    
+	background-position: 0 -40px;    cursor: default;
+	}
+
+
+
+
+/* prev, next, prevPage and nextPage buttons */
+a.browse {
+	background:url(img/hori_large.png) no-repeat;
+	display:block;
+	width:30px;
+	height:30px;
+	float:left;
+	margin:40px 10px;
+	cursor:pointer;
+	}
+
+
+/* right */
+a.right 				{ background-position: 0 -30px; clear:right; margin-right: 0px;}
+a.right:hover 		{ background-position:-30px -30px; }
+a.right:active 	{ background-position:-60px -30px; } 
+
+
+/* left */
+a.left				{ margin-left: 0px; } 
+a.left:hover  		{ background-position:-30px 0; }
+a.left:active  	{ background-position:-60px 0; }
+
+
+/* disabled navigational button */
+a.disabled {
+	visibility:hidden !important;		
+	}
+
+
+
+
+
+
+
+.fix {
+	clear: both;
+}
+
+
