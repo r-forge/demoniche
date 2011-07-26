@@ -4,7 +4,7 @@ function(modelname, Niche, Dispersal, repetitions, foldername)
 
 BEMDEM <- get(modelname, envir = .GlobalEnv)   #assign("BEMDEM", get(modelname))     
 
-#load(paste(modelname, ".rda", sep = ""))   
+# eval(parse(text = paste("load('", modelname,  ".rda')", sep = "")))        
    #  rm(Hmontana)
  require(sp)
  require(popbio)
@@ -142,7 +142,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                                          } # end if n0s > 0            
                          } # end px for
                            
-                         # which patches persist since last timestep (including seeds)?  yx = 1 tx = 8
+                         # how many patches persist since last timestep (including seeds)?  yx = 1 tx = 8
            metapop_results[yx_tx,mx,rx] <- 
             length(intersect(which(colSums(Projection[yx,,,tx]) > 1), n0s_ID))
 ################################################################################ 
@@ -194,19 +194,18 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                        
                     form <- as.formula(paste(paste(colnames(pop)[-c(1:2)],collapse="+"),"X+Y",sep="~"))    
                                                
-			       jpeg(file = paste(getwd(), "/", foldername, "/map_",
+			       jpeg(file = paste(getwd(), "/", foldername, "/map_", foldername,
                             BEMDEM$list_names_matrices[mx], ".jpeg", sep = ""))
                     print(levelplot(form, pop, col.regions=rev(heat.colors(100)), allow.multiple = TRUE, 
                             main = paste(foldername, BEMDEM$list_names_matrices[mx], sep = "_")))
                         dev.off() 
-		
                        
-   }     # end mx loop
+   }     # end mx loop 1
 
   } # end rx loop
   
     #################################################
-         # extra loop to calculate EMA, mean, eigenvalues, etc   
+         # extra loop to calculate EMA, mean, eigenvalues, etc.   
   print("Calculating summary values", quote = FALSE)
    
          for(mx in 1:length(BEMDEM$list_names_matrices)) 
@@ -246,30 +245,27 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
     population_results[yx_tx, "EMA", mx] <- min(population_sizes[yx_tx,mx,]) 
                         }       
 
-  save(simulation_results, file =  
-        paste(getwd(), "/", foldername, "/simulation_results.rda", sep = ""))
-  
-  save(metapop_results, file =  
-        paste(getwd(), "/", foldername, "/metapop_results.rda", sep = ""))
-  
-  save(eigen_results, file = 
-                   paste(getwd(), "/", foldername, "/eigen_results.rda", sep = "")) 
-   
-   write.table(simulation_results, sep = ",", file = 
-    paste(getwd(), "/", foldername, "/simulation_results.csv", sep = ""), col.names = NA)         
-    
-   jpeg(file = paste(getwd(), "/", foldername, "/EMA_",
+   jpeg(file = paste(getwd(), "/", foldername, "/EMA_", foldername,
         BEMDEM$list_names_matrices[mx], ".jpeg", sep = ""))
     plot(population_results[,"EMA",mx], ylim = c(0, max(population_results[,"EMA",mx])), 
         main = paste("EMA", BEMDEM$list_names_matrices[mx], foldername, sep = "_"),type = "l",  
         xlab = "Year", ylab = "Population") 
     dev.off()  
-   
-    
           } # end mx loop number 2, for eigenvalues. 
-       #########################################################
-   
+          
+       save(simulation_results, file =  
+        paste(getwd(), "/", foldername, "/simulation_results.rda", sep = ""))
+         
+       write.table(simulation_results, sep = ",", file = 
+        paste(getwd(), "/", foldername, "/simulation_results.csv", sep = ""), col.names = NA)         
     
+       save(metapop_results, file =  
+        paste(getwd(), "/", foldername, "/metapop_results.rda", sep = ""))
+
+       save(eigen_results, file = 
+        paste(getwd(), "/", foldername, "/eigen_results.rda", sep = "")) 
+
+       #########################################################                 
     print("    All repetitions completed!", quote = FALSE)
 
 return(population_results)

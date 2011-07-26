@@ -8,7 +8,7 @@ Sets-up the species data for demographic modelling.
 The first step used for modelling spatially-explicit demographic dynamics requires running the 'demoniche_setup' function, which checks the consistency of the user-supplied information and generates an R object containing the necessary information for modelling. The object is also saved in the working directory for future reference. Input data is either written directly into the workspace, or read from csv or txt files according to standard R procedures. 
 }
 \usage{
-demoniche_setup(interactive = FALSE, modelname, Populations, fraction_SDD, Nichemap, matrices, matrices_var, prob_scenario = c(0.5, 0.5), noise, transition_affected_niche = FALSE, transition_affected_env = FALSE, transition_affected_demogr = FALSE, env_stochas_type = "normal", stages, proportion_initial, density_individuals, fraction_LDD = NA, dispersal_constants, no_yrs, K = NULL, sumweight = FALSE)
+demoniche_setup(interactive = FALSE, modelname, Populations, fraction_SDD, gridbased, Nichemap, matrices, matrices_var, prob_scenario = c(0.5, 0.5), noise, transition_affected_niche = FALSE, transition_affected_env = FALSE, transition_affected_demogr = FALSE, env_stochas_type = "normal", stages, proportion_initial, density_individuals, fraction_LDD = NA, dispersal_constants, no_yrs, K = NULL, sumweight = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -23,6 +23,9 @@ demoniche_setup(interactive = FALSE, modelname, Populations, fraction_SDD, Niche
 }
   \item{fraction_SDD}{
 %%     ~~Describe \code{fraction_SDD} here~~
+}
+  \item{gridbased}{
+%%     ~~Describe \code{gridbased} here~~
 }
   \item{Nichemap}{
 %%     ~~Describe \code{Nichemap} here~~
