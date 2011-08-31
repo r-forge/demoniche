@@ -21,7 +21,7 @@ function(Matrix_projection, Matrix_projection_var = NULL,
 			         	1- (prob_scenario[prev_mx[yx_tx]] * noise)) 
                      rand_mxs     <- sample(1:2, 1, prob = prob_scenario_noise, replace = TRUE) 
                      one_mxs      <- Matrix_projection[,rand_mxs]    # select one matrix
-                     one_mxs_var  <- Matrix_projection_var[,rand_mxs]  # select one variance matrix
+                     one_mxs_var  <- sqrt(Matrix_projection_var[,rand_mxs]) # square root of variance is SD!
             	       prev_mx[yx_tx+1]    <- rand_mxs
                  
 ## Modify the chosen matrix with habitat suitability values and demographic stochasticity   
@@ -43,7 +43,8 @@ function(Matrix_projection, Matrix_projection_var = NULL,
                       } 
                                      
             # Catastrophes? if (t == catastrophes_interval)  
-                                                                                                                    
+            # Correlations between environmental stochasticity in values.  
+            #                                                                                                        
                one_mxs[one_mxs < 0] <- 0 # Matrix values cannot be negative 
               #  one_mxs[one_mxs == NA]                    
               
@@ -64,7 +65,7 @@ function(Matrix_projection, Matrix_projection_var = NULL,
    
 ################################################################################  
             # Allee effect here
-            # Sample number of offsping from poisson distribution! - but not necessary? 
+            # Sample number of offsping from poisson distribution!
              
             # if(is.numeric(transition_affected_demogr)) { # demographic stochasticity
               
