@@ -31,7 +31,7 @@ function(interactive=FALSE, modelname, Populations, stages,
   # I have to rescale matrices_sd to coefficient of variations! Or input coefficient of variations? 
   if(Nichemap == FALSE){    
     # how get that 'by' is the correct value (if <1 degre)  min_dist <-  
-     X = seq(min(Populations[,"X"]), max(Populations[,"X"]), 1), 
+  extent <- cbind( X = seq(min(Populations[,"X"]), max(Populations[,"X"]), 1), 
      Y = seq(min(Populations[,"Y"]), max(Populations[,"Y"]), 1))
  Nichemap <- cbind(HScoreID = 1:nrow(extent), extent, allyears = rep(1,nrow(extent)))    
   }        
@@ -83,15 +83,15 @@ function(interactive=FALSE, modelname, Populations, stages,
             Niche_ID[rows,4] <- Populations[pxs,1]
             n0_all[rows[1],] <- Populations[pxs,4] * proportion_initial * density_individuals[pxs] 
                 } 
- 
+
    # only the niche values      
          Niche_values <-  Nichemap[,4:(length(years_projections)+3)]              
                 
   # to make populationmax    K = NULL
      if(is.null(K)){ 
    
-    } else      
-     populationmax_all <- rep(K * max(rowSums(n0_all)), length= nrow(Nichemap)) 
+    } else      # put Kweight here
+     populationmax_all <- rep(K * (max(rowSums(n0_all))), length= nrow(Nichemap)) 
            
           # this is what cannot get made 
   dist_populations <- spDists(as.matrix(Niche_ID[,2:3]), longlat=TRUE)
