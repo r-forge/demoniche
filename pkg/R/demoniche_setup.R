@@ -89,7 +89,7 @@ function(interactive=FALSE, modelname, Populations, stages,
                 
   # to make populationmax    K = NULL
      if(is.null(K)){ 
-   
+   populationmax_all <- rep("no_K", length= nrow(Nichemap))
     } else      # put Kweight here
      populationmax_all <- rep(K * (max(rowSums(n0_all))), length= nrow(Nichemap)) 
            
@@ -100,12 +100,13 @@ function(interactive=FALSE, modelname, Populations, stages,
 
 dispersal_probabilities <- dist_latlong <- neigh_index <-NA # If no dispersal
 
-if(dispersal_constants != FALSE){
+if(dispersal_constants[1] != FALSE){                                
+     
   dispersal_probabilities <-
   dispersal_constants[1] * dexp((dist_populations * dispersal_constants[3]) / dispersal_constants[2])
          
   dispersal_probabilities[dist_populations > dispersal_constants[4]] <- 0
-  diag(dispersal_probabilities) <- 0   
+  diag(dispersal_probabilities) <- 0
         }      
 
 if(fraction_LDD != FALSE){

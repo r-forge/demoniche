@@ -1,6 +1,7 @@
 ### R code from vignette source '/home/hedvig/Package_demoniche/model/demoniche_manual.Rnw'
 ### Encoding: UTF-8
 
+options(width=72)
 
 
 library(demoniche)
@@ -93,10 +94,11 @@ matrix(matrices_mine[,"Reference_matrix"], ncol = 6, byrow = FALSE)
 stages_mine <- colnames(hudsonia$A85)
 
 
-sumweight_mine      <- c(0,1,1,1,1,1)              
+sumweight_mine      <- c(0,1,1,1,1,1)   
 
 
 transition_affected_niche_mine <- c(1,3)
+matrices_mine[transition_affected_niche_mine,1] # these values will be affected by the Niche values in the mean matrix
 
 
 transition_affected_env_mine <- "all"  
@@ -116,7 +118,7 @@ proportion_initial_mine <- c(0.9818098089, 0.0006907668, 0.0069076675,
                               0.0036840893, 0.0057563896, 0.0011512779)
 
 
-density_individuals_mine <- 20000                
+density_individuals_mine <- 20000             
 
 
 K_mine              <- 100
@@ -138,7 +140,6 @@ dispersal_constants_mine <- c(0.7, 0.7, 0.1, 200)
 
 
 rm(CC_nodispersal, eigen_results, Hmontana, hudsonia,hudvrs, niche_formulas, noCC_nodispersal)
-
 
 ls()
 

@@ -19,9 +19,10 @@ function(Matrix_projection, Matrix_projection_var = NULL,
             prob_scenario[prev_mx[yx_tx]] * noise
             , 
 			         	1- (prob_scenario[prev_mx[yx_tx]] * noise)) 
+                   
                      rand_mxs     <- sample(1:2, 1, prob = prob_scenario_noise, replace = TRUE) 
                      one_mxs      <- Matrix_projection[,rand_mxs]    # select one matrix
-                     one_mxs_var  <- sqrt(Matrix_projection_var[,rand_mxs]) # square root of variance is SD!
+                     one_mxs_var   <- one_mxs * (Matrix_projection_var[,rand_mxs]) 
             	       prev_mx[yx_tx+1]    <- rand_mxs
                  
 ## Modify the chosen matrix with habitat suitability values and demographic stochasticity   
@@ -34,11 +35,11 @@ function(Matrix_projection, Matrix_projection_var = NULL,
                     switch(EXPR = env_stochas_type, 
                             normal =
                              one_mxs[transition_affected_env] <- # normal distribution
-                                   rnorm(one_mxs[transition_affected_env], mean = one_mxs[transition_affected_env],
+                                   rnorm(length(one_mxs[transition_affected_env]), mean = one_mxs[transition_affected_env],
                                   sd = one_mxs_var[transition_affected_env])
                                   , 
                             lognormal = one_mxs[transition_affected_env] <- # lognormal distribution
-                                 rlnorm(one_mxs[transition_affected_env], meanlog = one_mxs[transition_affected_env], 
+                                 rlnorm(length(one_mxs[transition_affected_env]), meanlog = one_mxs[transition_affected_env], 
                                   sdlog = one_mxs_var[transition_affected_env]))
                       } 
                                      
@@ -55,9 +56,10 @@ function(Matrix_projection, Matrix_projection_var = NULL,
                 # To check if surivial and persistence sum to more than one. Not done yet. 
                   # if(sumweight[1] == 0) Atest <- A[-1,] # If seed stage remove the number of seeds. 
                   # Atest <-  Atest[-1,] # Remove number of recruits. Is this correct? 
-                  # to_subtract <- rep(1, 9)  -  colSums(Atest)
+               # to_subtract <- rep(1, 9)  -  colSums(Atest)
                   # any(colSums(Atest) > 1)
-                             
+            # 1/colsums() is the reduscing factor
+           # multiply each transitino values by this reducing factor
             
             n <- as.vector( A %*% n )                          # Matrix multiplication!
                     
@@ -92,8 +94,8 @@ function(Matrix_projection, Matrix_projection_var = NULL,
            #  Simple density dependence                 
            #  if population size exceeds populationmax, reduce population to populationmax               
                  if( sum(n) > 0) { 
-                   if(!is.na(populationmax)) {
-                    if ( sum(n * sumweight) > populationmax )  
+                   if(is.numeric(populationmax)) {
+                    if ( sum(n * sumweight) > populationmax )  # put Kweight here 
                        {  
                      n <- n * (populationmax/ sum(n * sumweight) ) 
                        }
@@ -102,4 +104,3 @@ function(Matrix_projection, Matrix_projection_var = NULL,
    return(n)
    
 }
-
