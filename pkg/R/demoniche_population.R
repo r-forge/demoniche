@@ -10,7 +10,6 @@ function(Matrix_projection, Matrix_projection_var = NULL,
 
 #} # end if gridbased = TRUE
 
-
           #if (!is.null(max_pop)) {
           #      c(max_pop * Populations$areas2[n_population])
           #      }
