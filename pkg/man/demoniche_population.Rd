@@ -8,7 +8,7 @@ demographic modelling
 Inner function that carries out demographic modelling in each population and year
 }
 \usage{
-demoniche_population(Matrix_projection, Matrix_projection_var = NULL, n, populationmax, K = NULL, onepopulation_Niche, sumweight, noise, prob_scenario, prev_mx, transition_affected_demogr, transition_affected_niche, transition_affected_env, env_stochas_type, yx_tx)
+demoniche_population(Matrix_projection, Matrix_projection_var = NULL, n, populationmax, K = NULL, Kweight, onepopulation_Niche, sumweight, noise, prob_scenario, prev_mx, transition_affected_demogr, transition_affected_niche, transition_affected_env, env_stochas_type, yx_tx)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +25,9 @@ demoniche_population(Matrix_projection, Matrix_projection_var = NULL, n, populat
 %%     ~~Describe \code{populationmax} here~~
 }
   \item{K}{
+%%     ~~Describe \code{K} here~~
+}
+  \item{Kweight}{
 %%     ~~Describe \code{K} here~~
 }
   \item{onepopulation_Niche}{

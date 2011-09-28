@@ -88,7 +88,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
        
 	 for(tx in 1:length(BEMDEM$years_projections)) # selects which time-slice of the simulation tx = 2
             {
-                          
+          
                                                  if (Niche == TRUE){ # Niche values
                                                          population_Niche <- BEMDEM$Niche_values[, tx]   
                                                        } 
@@ -108,32 +108,37 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                                     if(tx != 1 && yx == 1){ # when going to next time step, yx == 1
                                     
                                     n0s <- t(Projection[BEMDEM$no_yrs,, colSums(Projection[BEMDEM$no_yrs,,,tx-1]) > 0, tx-1])
-                                    n0s_ID <- which(colSums(Projection[BEMDEM$no_yrs,,,tx-1]) > 0)
-                                    
+                                    n0s_ID <- which(colSums(Projection[BEMDEM$no_yrs,,,tx-1]) > 0)                     
                                     BEMDEM$Niche_ID[colSums(Projection[BEMDEM$no_yrs,,,tx-1]) > 0, 2]
-                                   } else  { 
+                           
+                                    } else  { 
                                         # take population from previous year, same time period  
                                         n0s <- t(Projection[yx-1,, colSums(Projection[yx-1,,,tx]) > 0,tx])
                                         n0s_ID <- which(colSums(Projection[yx-1,,,tx]) > 0)
-                                      }        
+                          
+                                    }        
                                 } # end if tx == 1 && yx == 1  
                                             # n <- c(10,5,5,5,5,5)
-                           population_Niche_short <- population_Niche[n0s_ID] 
-                                    
+                     
+                              population_Niche_short <- population_Niche[n0s_ID] 
+                             
               # run fcn for each population px=1        
                      if (nrow(n0s) > 0) { 
                      
-                     for(px in 1:nrow(n0s))  {   # px = 1                  
+                     for(px in 1:nrow(n0s))  {   # px = 1 tx =1                 
                              n <- as.vector(n0s[px,]) 
-                              
+                           
                        #  source('demoniche_population.r')
                             # if (sum(n) > 0) {      
                           
-				
+                    # selects the right K for this pop and timeperiod         
+				          populationmax <- 
+                    BEMDEM$populationmax_all[n0s_ID[px],tx]     
+                             
                  Projection[yx,,n0s_ID[px],tx]    <- 
                       demoniche_population(Matrix_projection = Matrix_projection, Matrix_projection_var = Matrix_projection_var, 
-                          n = n, populationmax = BEMDEM$populationmax_all[px], onepopulation_Niche = population_Niche_short[px],
-                          sumweight = BEMDEM$sumweight, prob_scenario = BEMDEM$prob_scenario, noise = BEMDEM$noise, prev_mx = prev_mx, 
+                          n = n, populationmax = populationmax, onepopulation_Niche = population_Niche_short[px],
+                          sumweight = BEMDEM$sumweight, Kweight = BEMDEM$Kweight, prob_scenario = BEMDEM$prob_scenario, noise = BEMDEM$noise, prev_mx = prev_mx, 
                           transition_affected_demogr = BEMDEM$transition_affected_demogr, transition_affected_niche = BEMDEM$transition_affected_niche, 
                           transition_affected_env = BEMDEM$transition_affected_env, env_stochas_type = BEMDEM$env_stochas_type, yx_tx = yx_tx) 
                            

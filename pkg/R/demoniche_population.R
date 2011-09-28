@@ -1,23 +1,14 @@
 demoniche_population <-
 function(Matrix_projection, Matrix_projection_var = NULL,  
-                n, populationmax, K = NULL, onepopulation_Niche, sumweight, noise,  
+                n, populationmax, K = NULL, Kweight = BEMDEM$Kweight, onepopulation_Niche, sumweight, noise,  
                 prob_scenario, prev_mx, transition_affected_demogr, transition_affected_niche, 
                 transition_affected_env, env_stochas_type, yx_tx)
 {
 
-           
-#if gridbased = TRUE{
-
-#} # end if gridbased = TRUE
-
-          #if (!is.null(max_pop)) {
-          #      c(max_pop * Populations$areas2[n_population])
-          #      }
+  
      			prob_scenario_noise <-
-            c(
-            prob_scenario[prev_mx[yx_tx]] * noise
-            , 
-			         	1- (prob_scenario[prev_mx[yx_tx]] * noise)) 
+            c(prob_scenario[prev_mx[yx_tx]] * noise
+            , 1- (prob_scenario[prev_mx[yx_tx]] * noise)) 
                    
                      rand_mxs     <- sample(1:2, 1, prob = prob_scenario_noise, replace = TRUE) 
                      one_mxs      <- Matrix_projection[,rand_mxs]    # select one matrix
@@ -51,15 +42,16 @@ function(Matrix_projection, Matrix_projection_var = NULL,
             A <- 
             matrix(one_mxs, ncol = length(n), nrow = length(n), byrow = FALSE)            
                  
-          
-                # To check if surivial and persistence sum to more than one. Not done yet. 
-                  # if(sumweight[1] == 0) Atest <- A[-1,] # If seed stage remove the number of seeds. 
-                  # Atest <-  Atest[-1,] # Remove number of recruits. Is this correct? 
-               # to_subtract <- rep(1, 9)  -  colSums(Atest)
-                  # any(colSums(Atest) > 1)
-            # 1/colsums() is the reduscing factor
-           # multiply each transitino values by this reducing factor
-            
+                #To check if surivial and persistence sum to more than one.
+#                     Atest <- A
+#                       # If seed stage remove the number of seeds. 
+#                    Atest[1,][-1] <- 0 # Remove number of recruits.
+#            # colSums(Atest)
+#            to_reduce <-     colSums (Atest[,(colSums(Atest) > 1)])
+#             Atested <- (Atest[,(colSums(Atest) > 1)] )/ to_reduce
+#            # colSums(Atested)
+#            A[-1,colSums(Atest) > 1] <- Atested[-1,] # the new A, <1
+#          
             n <- as.vector( A %*% n )                          # Matrix multiplication!
                     
             n <- floor(n) # If the number of individuals is less than one, replace with zero
@@ -94,7 +86,7 @@ function(Matrix_projection, Matrix_projection_var = NULL,
            #  if population size exceeds populationmax, reduce population to populationmax               
                  if( sum(n) > 0) { 
                    if(is.numeric(populationmax)) {
-                    if ( sum(n * sumweight) > populationmax )  # put Kweight here 
+                    if ( sum(n * Kweight) > populationmax )  # Kweight here 
                        {  
                      n <- n * (populationmax/ sum(n * sumweight) ) 
                        }

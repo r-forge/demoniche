@@ -2,7 +2,7 @@ Package: demoniche
 Type: Package
 Title: demoniche - spatial population dynamics
 Version: 1.0
-Date: 2011-07-13
+Date: 2011-09-27
 Author: Hedvig Nenzen
 Maintainer: Hedvig Nenzen <hedvig.nenzen@gmail.com>
 Description: demoniche carries out spatially-explicit demographic modelling. The model simulates stochastic and gradual environmental changes, and dispersal between sub-populations to investigate population dynamics and persistence in space and time.
