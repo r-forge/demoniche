@@ -40,25 +40,30 @@ metapop_results <- array(NA,       # per matrix!
           dimnames = list(paste("year", 1: yrs_total, sep = ""), BEMDEM$list_names_matrices, paste("rep", 1:repetitions, sep = "_")))
     
 simulation_results <- array(1:200, 
-          dim = c(length(BEMDEM$list_names_matrices), 6+length(BEMDEM$years_projections)), 
+          dim = c(length(BEMDEM$list_names_matrices), 7+length(BEMDEM$years_projections)), 
           dimnames = 
           list(BEMDEM$list_names_matrices, 
-      c("lambda", "stoch_lambda","mean_perc_ext_final", "initial_population_area", "initial_pop", "mean_final_pop", paste("EMA", BEMDEM$years_projections))
-      )  )
-              
+   			   c("lambda", "stoch_lambda","mean_perc_ext_final", "initial_population_area", "initial_population", "mean_final_pop", "mean_no_patches_final", 
+                paste("EMA", BEMDEM$years_projections))
+     		 ) )
+         
 EMA <- array(0, 
-          dim = c(repetitions, length(BEMDEM$list_names_matrices), length(BEMDEM$years_projections)))              # original area occupied
-       
-              simulation_results[,"initial_population_area"] <- 
-                    sum(BEMDEM$Populations_area) 
-              # original population size            
-       simulation_results[,"initial_pop"] <- 
-                    sum((colSums(BEMDEM$n0_all) * BEMDEM$sumweight))
-                  
-   
+                 dim = c(repetitions, length(BEMDEM$list_names_matrices), length(BEMDEM$years_projections), 2), dimnames = 
+          list(paste("rep", 1:repetitions, sep = "_"), BEMDEM$list_names_matrices, BEMDEM$years_projections, c("EMA", "No_populations")))
+                           
 population_Niche <- rep(1, nrow(BEMDEM$Niche_ID))
 
+              simulation_results[,"initial_population_area"] <- 
+                    sum(BEMDEM$Orig_Populations[,"area_population"])   
+                       # original population size            
+       		  simulation_results[,"initial_population"] <- 
+                    sum(colSums(BEMDEM$n0_all) * BEMDEM$sumweight)
+                  
+                  
 dir.create(paste(getwd(), "/", foldername, sep = ""), showWarnings = FALSE)
+              # original area occupied
+       
+
 
 #### Start repetitions #########################################################
   
@@ -146,9 +151,9 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                                          } # end if n0s > 0            
                          } # end px for
                            
-                         # which patches persist since last timestep (including seeds)?  yx = 1 tx = 8
+           #  Which many patches persist since last timestep (including seeds)?  
            metapop_results[yx_tx,mx,rx] <- 
-            length(intersect(which(colSums(Projection[yx,,,tx]) > 1), n0s_ID))
+            length(intersect( which(colSums(Projection[yx,,,tx]) > 1), n0s_ID))
 ################################################################################ 
 
 ##################### DISPERSAL FOR ALL PATCHES ####################                              
@@ -185,10 +190,13 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                  
               } # end yx        
                
-      EMA[rx,mx,tx] <-
+      EMA[rx,mx,tx,1] <- # the minimum population each repetition
         min(apply((Projection[,,,tx] * BEMDEM$sumweight), 1, sum))                                        
-                                                         
-        simulation_results[mx, 6+tx] <- mean(EMA[,mx, tx])  
+      
+      EMA[rx,mx,tx,2] <- # the number of populations that exist each repetition
+         sum(colSums(Projection[yx,,,tx]) > 1)                                      
+                                                      
+        simulation_results[mx, 7+tx] <- mean(EMA[, mx, tx, 1])
                                                  
         } # end tx loop  
      
@@ -209,13 +217,18 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                     print(levelplot(form, pop, col.regions=rev(heat.colors(100)), allow.multiple = TRUE, 
                             main = paste(foldername, BEMDEM$list_names_matrices[mx], sep = "_")))
                         dev.off() 
-		
+                        
+                        
+		    
                        
    }     # end mx loop
 
-  } # end rx loop
-  
-    #################################################
+} # end rx loop
+
+		rm(Projection)
+#### END OF MODELLING #################################################
+####################################################################################  
+    
          # extra loop to calculate mean, eigenvalues, etc   
   print("Calculating summary values", quote = FALSE)
    
@@ -241,10 +254,13 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
             simulation_results[mx, "mean_final_pop"] <- 
                               mean(population_sizes[yrs_total,mx,]) 
                    # Final mean percentage of patches extinct
-            simulation_results[mx, "mean_perc_ext_final"] <- 
-                              mean(metapop_results[yrs_total,mx,]) 
-                            #  print(   mean(metapop_results[yrs_total,mx,]))   
-              
+          #  simulation_results[mx, "mean_perc_ext_final"] <- 
+          #                     (metapop_results[1,mx,] - mean(metapop_results[yrs_total,mx,]))/metapop_results[1,mx,]*100
+                             
+            simulation_results[mx, "mean_no_patches_final"] <- 
+                             mean(EMA[,mx,length(BEMDEM$years_projections),2])      
+                             
+                                                                        
               for(yx_tx in 1:yrs_total) 
                        {   
          # mean of all repetitions            
@@ -266,14 +282,15 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                        
           } # end mx loop number 2, for eigenvalues. 
 
-########
+######## PLOTS ################
 # plot EMAS
     jpeg(file = paste(getwd(), "/", foldername, "/EMAs.jpeg", sep = ""))
-        for(mx in 1:length(BEMDEM$list_names_matrices)) 
+    #    matplot(t(simulation_results[, 8:(7+length(BEMDEM$years_projections))]), pch = 15, type = "l")
+for(mx in 1:length(BEMDEM$list_names_matrices)) 
             {
          par(mar = c(7, 4, 4, 2) + 0.1)
            plot(simulation_results[mx, 7:(6+length(BEMDEM$years_projections))], 
-          type = 'b', ylim = range(EMA), col = mx, xlab = "", ylab = "EMA", axes = FALSE)
+          type = 'b', ylim = range(simulation_results[, 7:(6+length(BEMDEM$years_projections))]), col = mx, xlab = "", ylab = "EMA", axes = FALSE)
             axis(1, labels = FALSE)
           text(1:length(BEMDEM$years_projections), par("usr")[3], srt = 45, adj = 1,
                     labels = (BEMDEM$years_projections), xpd = TRUE)
@@ -286,7 +303,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
           dev.off()
 
 #### plot population results     
-          jpeg(file = paste(getwd(), "/", foldername, "/Simulation_results.jpeg", sep = ""))
+          jpeg(file = paste(getwd(), "/", foldername, "/population_results.jpeg", sep = ""))
         for(mx in 1:length(BEMDEM$list_names_matrices)) 
             {
          par(mar = c(7, 4, 4, 2) + 0.1)
@@ -303,24 +320,24 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
             par(new = TRUE)
            } # end mx loop number 3, for plotting EMAs 
         legend("topright", legend = BEMDEM$list_names_matrices, col = 1:mx, fill = 1:mx)  
-        title("Population sizes (= 1 SD) for different scenarios")
+        title("Population sizes (+- 1 SD) for different scenarios")
           dev.off()
            
        #########################################################
-  write.table(simulation_results, sep = ",", file = 
-    paste(getwd(), "/", foldername, "/simulation_results.csv", sep = ""), col.names = NA)         
+  write.table(simulation_results, sep = ";", file = 
+   		paste(getwd(), "/", foldername, "/population_results.csv", sep = ""), col.names = NA)         
  
   save(simulation_results, file =  
-        paste(getwd(), "/", foldername, "/simulation_results.rda", sep = ""))
+        paste(getwd(), "/", foldername, "/population_sizes.rda", sep = ""))
   
   save(metapop_results, file =  
         paste(getwd(), "/", foldername, "/metapop_results.rda", sep = ""))
   
   save(eigen_results, file = 
-                   paste(getwd(), "/", foldername, "/eigen_results.rda", sep = "")) 
+        paste(getwd(), "/", foldername, "/eigen_results.rda", sep = "")) 
 
   save(EMA, file = 
-                   paste(getwd(), "/", foldername, "/EMA.rda", sep = ""))
+        paste(getwd(), "/", foldername, "/EMA.rda", sep = ""))
 
   save(population_results, file = paste(getwd(), "/", 
         foldername, "/population_results.rda", sep = ""))

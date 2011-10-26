@@ -206,4 +206,4 @@ demoniche_setup(modelname = "Hmontana", # Name of information object
 #line 461 "/Users/hedvig/Documents/Demoniche/model/demoniche_manual.Rnw"
 Hmontana$neigh_index
 
-
+str(Hmontana)
