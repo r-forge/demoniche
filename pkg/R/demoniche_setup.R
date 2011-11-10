@@ -1,12 +1,12 @@
 demoniche_setup <-
 function(modelname, Populations, stages,
-                      Nichemap = FALSE, matrices, matrices_var, prob_scenario = c(0.5, 0.5),
+                      Nichemap = "oneperiod", matrices, matrices_var, prob_scenario = c(0.5, 0.5),
                 proportion_initial, density_individuals,
                       transition_affected_niche = FALSE, transition_affected_env = FALSE,
                        transition_affected_demogr = FALSE, env_stochas_type = "normal", 
                      noise = 1, fraction_SDD = FALSE, 
                       fraction_LDD = FALSE, dispersal_constants = FALSE,
-                       no_yrs, Ktype = "celing", K = NULL, Kweight = FALSE, sumweight = FALSE)
+                       no_yrs, Ktype = "ceiling", K = NULL, Kweight = FALSE, sumweight = FALSE)
 {  
       require(sp)
       
@@ -35,10 +35,10 @@ function(modelname, Populations, stages,
            list_names_matrices <- c(list_names_matrices, list(M_name_one))
          }      
 
-             # If no Nichemap supplied and instead is number of periods, make background grid.
-      if(is.vector(Nichemap) | is.character(Nichemap)) 
+  # If no Nichemap supplied and instead is number of periods or default "oneperiod", make background grid.
+      if(is.vector(Nichemap) | Nichemap[1] == "oneperiod") 
           {  
-        min_dist <- sort(unique(dist(Populations[,2:3])))[2]  # get the 'by' to make Nichemap
+        min_dist <- sort(unique(dist(Populations[,2:3])))[1]  # get the 'by' to make Nichemap
         # If this is too small, and populations are close, there will be a huge grid. 
         # Lets hope this will not happen often
       extent <- expand.grid(X = seq(min(Populations[,"X"]), max(Populations[,"X"]), by = min_dist), 
@@ -49,9 +49,16 @@ function(modelname, Populations, stages,
                            dimnames = list(NULL, paste(Nichemap))))    
           }        
     
-      # Take away all grid cells that will never be suitable for the species
-  Nichemap <- Nichemap[rowSums(Nichemap[,-c(1:3)]) != 0, ]
-   
+      # Take away all grid cells that will never be suitable for the species.
+      # Only if we are using habitat suitabiility values, otherwise it will be the same size.
+    if(is.vector(Nichemap[,-c(1:3)])) 
+      {
+      Nichemap <- Nichemap[ Nichemap[,-c(1:3)] != 0, ]
+      } else {
+      Nichemap <- Nichemap[rowSums(Nichemap[,-c(1:3)]) != 0, ]
+      }
+
+
   years_projections <- colnames(Nichemap)[4:ncol(Nichemap)]
   
   # if(no_yrs < 1) print("There must be at least two years of projections!") 
@@ -97,7 +104,7 @@ function(modelname, Populations, stages,
                 } 
  
       # only the niche values      
-         Niche_values <-  Nichemap[,4:(length(years_projections)+3)]              
+         Niche_values <- as.matrix(Nichemap[,4:(length(years_projections)+3)], ncol = length(years_projections))            
  
 ### Density dependence ##################################                  
   # to make populationmax    

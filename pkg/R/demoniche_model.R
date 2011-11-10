@@ -91,7 +91,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
       
      prev_mx <- rep(1, times = yrs_total + 1)
        
-	 for(tx in 1:length(BEMDEM$years_projections)) # selects which time-slice of the simulation tx = 2
+	 for(tx in 1:length(BEMDEM$years_projections)) # selects which time-slice of the simulation tx = 1
             {
           
                                                  if (Niche == TRUE){ # Niche values
@@ -253,9 +253,10 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
             
             simulation_results[mx, "mean_final_pop"] <- 
                               mean(population_sizes[yrs_total,mx,]) 
+             
                    # Final mean percentage of patches extinct
-          #  simulation_results[mx, "mean_perc_ext_final"] <- 
-          #                     (metapop_results[1,mx,] - mean(metapop_results[yrs_total,mx,]))/metapop_results[1,mx,]*100
+            simulation_results[mx, "mean_perc_ext_final"] <- 
+                               (metapop_results[1,mx,] - mean(metapop_results[yrs_total,mx,]))/metapop_results[1,mx,]*100
                              
             simulation_results[mx, "mean_no_patches_final"] <- 
                              mean(EMA[,mx,length(BEMDEM$years_projections),2])      
