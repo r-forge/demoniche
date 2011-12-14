@@ -1,22 +1,24 @@
 demoniche_population <-
-function(Matrix_projection, Matrix_projection_var = NULL,  
+function(Matrix_projection, Matrix_projection_var,  
                 n, populationmax, K = NULL, Kweight = BEMDEM$Kweight, onepopulation_Niche, sumweight, noise,  
                 prob_scenario, prev_mx, transition_affected_demogr, transition_affected_niche, 
                 transition_affected_env, env_stochas_type, yx_tx)
 {
 
-  
+      
      			prob_scenario_noise <-
             c(prob_scenario[prev_mx[yx_tx]] * noise
             , 1- (prob_scenario[prev_mx[yx_tx]] * noise)) 
                    
                      rand_mxs     <- sample(1:2, 1, prob = prob_scenario_noise, replace = TRUE) 
                      one_mxs      <- Matrix_projection[,rand_mxs]    # select one matrix
-                     one_mxs_var   <- one_mxs * (Matrix_projection_var[,rand_mxs]) 
-            	       prev_mx[yx_tx+1]    <- rand_mxs
-                 
-## Modify the chosen matrix with habitat suitability values and demographic stochasticity   
-
+                           prev_mx[yx_tx+1]    <- rand_mxs # saves the choice of matrix
+              
+              ## Modify the chosen matrix with habitat suitability values and demographic stochasticity
+          if(Matrix_projection_var[1] != FALSE) 
+            {           
+                       one_mxs_var <- one_mxs * (Matrix_projection_var[,rand_mxs]) 
+            	        
              if(is.numeric(transition_affected_niche)) {                  ## Niche values   
                     one_mxs[transition_affected_niche] <- one_mxs[transition_affected_niche] * onepopulation_Niche    
                      }
@@ -32,10 +34,9 @@ function(Matrix_projection, Matrix_projection_var = NULL,
                                  rlnorm(length(one_mxs[transition_affected_env]), meanlog = one_mxs[transition_affected_env], 
                                   sdlog = one_mxs_var[transition_affected_env]))
                       } 
-                                     
-            # Catastrophes? if (t == catastrophes_interval)  
-            # Correlations between environmental stochasticity in values.  
-            #                                                                                                        
+          }
+                    
+                                                                                                                 
                one_mxs[one_mxs < 0] <- 0 # Matrix values cannot be negative 
               #  one_mxs[one_mxs == NA]                    
               
@@ -86,7 +87,7 @@ function(Matrix_projection, Matrix_projection_var = NULL,
            #  if population size exceeds populationmax, reduce population to populationmax               
                  if( sum(n) > 0) { 
                    if(is.numeric(populationmax)) {
-                    if ( sum(n * Kweight) > populationmax )  # Kweight here 
+                    if ( sum(n * Kweight) > populationmax )  
                        {  
                      n <- n * (populationmax/ sum(n * sumweight) ) 
                        }

@@ -1,6 +1,6 @@
 demoniche_setup <-
 function(modelname, Populations, stages,
-                      Nichemap = "oneperiod", matrices, matrices_var, prob_scenario = c(0.5, 0.5),
+                      Nichemap = "oneperiod", matrices, matrices_var = FALSE, prob_scenario = c(0.5, 0.5),
                 proportion_initial, density_individuals,
                       transition_affected_niche = FALSE, transition_affected_env = FALSE,
                        transition_affected_demogr = FALSE, env_stochas_type = "normal", 
@@ -21,7 +21,8 @@ function(modelname, Populations, stages,
   if(length(proportion_initial) != length(stages)) print("Number of stages or proportions is wrong!")
   if(nrow(matrices) %% length(stages)!= 0) print("Number of rows in matrix is not a multiple of stages name vector!")
   if(is.vector(Populations)) print("There must be at least two populations!") 
-  
+  if(sum(proportion_initial) > 1.02 |  sum(proportion_initial) < .99) print("Your 'proportion_initial' doesn't add to one...")
+      
   if(is.numeric(sumweight)){
          if(length(sumweight) != length(stages)) print("Length of sumweight does not correpond to length of stages!")
          }
@@ -36,7 +37,7 @@ function(modelname, Populations, stages,
          }      
 
   # If no Nichemap supplied and instead is number of periods or default "oneperiod", make background grid.
-      if(is.vector(Nichemap) | Nichemap[1] == "oneperiod") 
+      if(is.vector(Nichemap) | (Nichemap == "oneperiod")[1] )
           {  
         min_dist <- sort(unique(dist(Populations[,2:3])))[1]  # get the 'by' to make Nichemap
         # If this is too small, and populations are close, there will be a huge grid. 
@@ -108,11 +109,12 @@ function(modelname, Populations, stages,
  
 ### Density dependence ##################################                  
   # to make populationmax    
-   
-  populationmax_all <- matrix(mean(K), ncol = length(years_projections), nrow = nrow(Nichemap))
-           colnames(populationmax_all) <- years_projections
-           rownames(populationmax_all) <- Niche_ID[,"Niche_ID"]
-
+    if (is.numeric(K))
+      {
+        populationmax_all <- matrix(mean(K), ncol = length(years_projections), nrow = nrow(Nichemap))
+             colnames(populationmax_all) <- years_projections
+             rownames(populationmax_all) <- Niche_ID[,"Niche_ID"]
+        }
        if(length(K)  == 1)
          { # if all populations have the same K for all time periods
           populationmax_all <- matrix(K, ncol = length(years_projections), nrow = nrow(Nichemap))
@@ -134,8 +136,8 @@ function(modelname, Populations, stages,
   
        if(length(K)  == length(years_projections) )
          { # if all time periods have the different K, same for all populations
-     populationmax_all[rowSums(n0_all) == 0,] <-
-       matrix(K, ncol = length(years_projections), nrow = nrow(Nichemap))
+    populationmax_all[rowSums(n0_all) == 0,] <-
+            matrix(K, ncol = length(years_projections), nrow = nrow(Nichemap) - nrow(Populations))
      populationmax_all[rowSums(n0_all) > 0,] <- 
           matrix(K, ncol = length(years_projections), nrow = nrow(Populations), byrow =TRUE)
          }     
@@ -150,7 +152,7 @@ function(modelname, Populations, stages,
     
       if(is.null(K)){ 
         populationmax_all <- matrix("no_K", ncol = length(years_projections), nrow = nrow(Nichemap))
-          }  
+          }
 
           
 #       if(Ktype == "ricker")
@@ -169,25 +171,29 @@ function(modelname, Populations, stages,
          
 ### Dispersal ######################################     
           # this is what requires lots of memory 
-  dist_populations <- spDists(as.matrix(Niche_ID[,2:3]), longlat=TRUE) # dist(as.matrix(Niche_ID[,2:3])) 
+      
+  dist_populations <- spDists(as.matrix(Niche_ID[,2:3])) 
        dimnames(dist_populations) <- list(Niche_ID[,1], Niche_ID[,1])
 
-dispersal_probabilities <- dist_latlong <- neigh_index <-NA # If no dispersal
+  dispersal_probabilities <- dist_latlong <- neigh_index <- NA # If no dispersal
 
-if(dispersal_constants[1] != FALSE){                                
-     
-  dispersal_probabilities <-
-  dispersal_constants[1] * dexp((-(dist_populations ^ dispersal_constants[3])) / dispersal_constants[2])
+        if(dispersal_constants[1] != FALSE)
+          {                                
+         dispersal_probabilities <-
+             dispersal_constants[1] * exp( - dist_populations ^ (dispersal_constants[3] / dispersal_constants[2]) )
         
-  dispersal_probabilities[dist_populations > dispersal_constants[4]] <- 0
-  diag(dispersal_probabilities) <- 0
-        }      
-
-if(fraction_LDD != FALSE){
-  dist_latlong <- round(as.matrix(dist(Niche_ID[,2:3])), 1)                   
-   # find populations that are neighboring 
-  neigh_index <- sort(unique(as.numeric(dist_latlong)))[2:3]         
-}          
+         dispersal_probabilities[dist_populations > dispersal_constants[4]] <- 0
+         
+         diag(dispersal_probabilities) <- 0
+          }      
+      
+     
+      if(fraction_LDD != FALSE)
+        {
+        dist_latlong <- round(as.matrix(dist(Niche_ID[,2:3])), 1)                   
+       # find populations that are neighboring 
+        neigh_index <- sort(unique(as.numeric(dist_latlong)))[2:3]         
+        }          
   
    if(sumweight[1] == "all_stages") sumweight <- rep(1, length(proportion_initial))
    if(Kweight[1] == "FALSE") Kweight <- rep(1, length(proportion_initial))
@@ -212,7 +218,7 @@ if(fraction_LDD != FALSE){
                                                    # dist_populations not used.
 BEMDEM <- list(Orig_Populations = Populations, Niche_ID = Niche_ID, Niche_values = Niche_values,    
         years_projections = years_projections, 
-        matrices = matrices, matrices_var = as.matrix(matrices_var), prob_scenario = prob_scenario, noise = noise,
+        matrices = matrices, matrices_var = matrices_var, prob_scenario = prob_scenario, noise = noise,
         stages = stages, proportion_initial = proportion_initial, density_individuals = 
         density_individuals, 
         fraction_SDD = fraction_SDD, dispersal_probabilities = dispersal_probabilities, 

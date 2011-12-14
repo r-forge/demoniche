@@ -25,19 +25,20 @@ seeds_per_population_new_SDD <- seeds_per_population_new_LDD <-rep(0,length(seed
          #  if(px_orig == pxdisp_new) break 
          
               # print(paste( px_orig, pxdisp_new))
-         if(dist_latlong[pxdisp_new, px_orig] == neigh_index[1]) 
+               if(dist_latlong[pxdisp_new, px_orig] == neigh_index[1]) 
                       {
                       seeds_per_population_new_SDD[pxdisp_new] <-      # where do they go? 
               seeds_per_population_new_SDD[pxdisp_new] + (seeds_per_population_migrate_SDD[px_orig] * 0.2) # these are the dispersing seeds          #  addseeds[pxdisp_new] +
                      #   print(paste("dispersal contingous: px_orig", px_orig, "to pxdisp_new",pxdisp_new, sep = " "))
                         } 
-         
-         if(dist_latlong[pxdisp_new, px_orig] == neigh_index[2]) 
+             if( length(neigh_index) == 2 ){
+              if(dist_latlong[pxdisp_new, px_orig] == neigh_index[2]) 
                       {
                       seeds_per_population_new_SDD[pxdisp_new] <- 
                      seeds_per_population_new_SDD[pxdisp_new] + (seeds_per_population_migrate_SDD[px_orig] * 0.05)        #addseeds[pxdisp_new] +
                      #     print(paste("dispersal sideways: px_orig", px_orig, "to pxdisp_new", pxdisp_new, sep = " "))
                         }
+                }
                 } # end pxdisp_new 
          } # end px_orig 
          
