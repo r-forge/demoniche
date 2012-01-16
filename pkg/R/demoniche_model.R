@@ -82,13 +82,20 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
  # this selects two matrices, the first basic matrix and the projection one mx =1  
      Matrix_projection <- cbind(BEMDEM$matrices[,1], (BEMDEM$matrices[, mx]))
         
- # this selects two standard deviation matrices, the first basic matrix and the projection one (column mx) 
-    if(ncol(BEMDEM$matrices_var) > 1){
+ # this selects two standard deviation matrices, the first basic matrix and the projection one (column mx)
+        
+    if(BEMDEM$matrices_var[1] != FALSE) # If matrices are included or not.
+      {
+       if(ncol(BEMDEM$matrices_var) > 1){
            Matrix_projection_var <- cbind(BEMDEM$matrices_var[,1], (BEMDEM$matrices_var[, mx]))                                                     
       } else {
           Matrix_projection_var <- cbind(BEMDEM$matrices_var[,1], (BEMDEM$matrices_var[, 1]))  
       }
-      
+    } else
+    {
+      Matrix_projection_var <- FALSE
+    }
+         
      prev_mx <- rep(1, times = yrs_total + 1)
        
 	 for(tx in 1:length(BEMDEM$years_projections)) # selects which time-slice of the simulation tx = 1
@@ -215,7 +222,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
 			       jpeg(file = paste(getwd(), "/", foldername, "/map_",
                             BEMDEM$list_names_matrices[mx], ".jpeg", sep = ""))
                     print(levelplot(form, pop, col.regions=rev(heat.colors(100)), allow.multiple = TRUE, 
-                            main = paste(foldername, BEMDEM$list_names_matrices[mx], sep = "_")))
+                            main = paste("Distribution", foldername, BEMDEM$list_names_matrices[mx], sep = "_")))
                         dev.off() 
                         
                         
@@ -255,8 +262,8 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                               mean(population_sizes[yrs_total,mx,]) 
              
                    # Final mean percentage of patches extinct
-            simulation_results[mx, "mean_perc_ext_final"] <- 
-                               (metapop_results[1,mx,] - mean(metapop_results[yrs_total,mx,]))/metapop_results[1,mx,]*100
+         #   simulation_results[mx, "mean_perc_ext_final"] <- 
+         #                      (metapop_results[1,mx,] - mean(metapop_results[yrs_total,mx,]))/metapop_results[1,mx,]*100
                              
             simulation_results[mx, "mean_no_patches_final"] <- 
                              mean(EMA[,mx,length(BEMDEM$years_projections),2])      
@@ -283,28 +290,37 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                        
           } # end mx loop number 2, for eigenvalues. 
 
-######## PLOTS ################
+######## PLOTS ################ 
 # plot EMAS
-    jpeg(file = paste(getwd(), "/", foldername, "/EMAs.jpeg", sep = ""))
-    #    matplot(t(simulation_results[, 8:(7+length(BEMDEM$years_projections))]), pch = 15, type = "l")
-for(mx in 1:length(BEMDEM$list_names_matrices)) 
+    jpeg(file = paste(getwd(), "/", foldername, "/EMAs.jpeg", sep = ""), 
+        width = 580, height = 480)
+      #  matplot(t(simulation_results[, 8:(7+length(BEMDEM$years_projections))]), pch = 15, type = "l")
+        for(mx in 1:length(BEMDEM$list_names_matrices)) 
             {
-         par(mar = c(7, 4, 4, 2) + 0.1)
-           plot(simulation_results[mx, 7:(6+length(BEMDEM$years_projections))], 
-          type = 'b', ylim = range(simulation_results[, 7:(6+length(BEMDEM$years_projections))]), col = mx, xlab = "", ylab = "EMA", axes = FALSE)
-            axis(1, labels = FALSE)
-          text(1:length(BEMDEM$years_projections), par("usr")[3], srt = 45, adj = 1,
+         par(mar = c(7, 7, 4, 2) + 0.1, cex = 1.5)
+           plot(simulation_results[mx, 8:(7+length(BEMDEM$years_projections))], 
+           type = 'b', ylim = 
+             range(simulation_results[, 8:c(7+length(BEMDEM$years_projections))])
+                , 
+                col = mx, xlab = "", ylab = "", axes = FALSE)
+        par(new = TRUE)
+             } # end mx loop number 3, for plotting EMAs 
+           axis(1, at = 1:length(BEMDEM$years_projections), labels = FALSE)
+
+         text(1:length(BEMDEM$years_projections), y = par("usr")[3] - 5, srt = 45, adj = 1,
                     labels = (BEMDEM$years_projections), xpd = TRUE)
-          mtext(1, text = "Time period", line = 6)
-          axis(2, xpd = TRUE)
-             par(new = TRUE)
-           } # end mx loop number 3, for plotting EMAs 
+         mtext(1, text = "Time", line = 6, cex = 1.7)
+         mtext(2, text = "EMA (number of individuals)", line = 6, cex = 1.7)
+         axis(2, xpd = TRUE, las = 1)
+        
         legend("topright", legend = BEMDEM$list_names_matrices, col = 1:mx, fill = 1:mx)  
-        title("EMA for different scenarios")
-          dev.off()
+        title("EMA for different matrices", cex = 0.9)
+
+    dev.off()
 
 #### plot population results     
-          jpeg(file = paste(getwd(), "/", foldername, "/population_results.jpeg", sep = ""))
+          jpeg(file = paste(getwd(), "/", foldername, "/population_results.jpeg", sep = ""), 
+              width = 580, height = 480)
         for(mx in 1:length(BEMDEM$list_names_matrices)) 
             {
          par(mar = c(7, 4, 4, 2) + 0.1)
