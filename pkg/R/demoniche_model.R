@@ -39,7 +39,7 @@ metapop_results <- array(NA,       # per matrix!
           dim = c(yrs_total, length(BEMDEM$list_names_matrices), repetitions), 
           dimnames = list(paste("year", 1: yrs_total, sep = ""), BEMDEM$list_names_matrices, paste("rep", 1:repetitions, sep = "_")))
     
-simulation_results <- array(1:200, 
+simulation_results <- array(NA, 
           dim = c(length(BEMDEM$list_names_matrices), 7+length(BEMDEM$years_projections)), 
           dimnames = 
           list(BEMDEM$list_names_matrices, 
@@ -57,11 +57,11 @@ population_Niche <- rep(1, nrow(BEMDEM$Niche_ID))
                     sum(BEMDEM$Orig_Populations[,"area_population"])   
                        # original population size            
        		  simulation_results[,"initial_population"] <- 
-                    sum(colSums(BEMDEM$n0_all) * BEMDEM$sumweight)
+                    round(sum(colSums(BEMDEM$n0_all) * BEMDEM$sumweight), 0)
                   
                   
 dir.create(paste(getwd(), "/", foldername, sep = ""), showWarnings = FALSE)
-              # original area occupied
+          
        
 
 
@@ -201,7 +201,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
         min(apply((Projection[,,,tx] * BEMDEM$sumweight), 1, sum))                                        
       
       EMA[rx,mx,tx,2] <- # the number of populations that exist each repetition
-         sum(colSums(Projection[yx,,,tx]) > 1)                                      
+         sum(colSums(Projection[yx,,,tx]) > 1)    
                                                       
         simulation_results[mx, 7+tx] <- mean(EMA[, mx, tx, 1])
                                                  
@@ -239,7 +239,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
          # extra loop to calculate mean, eigenvalues, etc   
   print("Calculating summary values", quote = FALSE)
    
-         for(mx in 1:length(BEMDEM$list_names_matrices)) 
+         for(mx in 1:length(BEMDEM$list_names_matrices)) # mx = 1
             {       
       # for 'eigen_results' object for each matrix. 
              eigen_results[[mx]] <- c(eigen.analysis(matrix(BEMDEM$matrices[, mx], 
@@ -262,12 +262,12 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                               mean(population_sizes[yrs_total,mx,]) 
              
                    # Final mean percentage of patches extinct
-         #   simulation_results[mx, "mean_perc_ext_final"] <- 
+         #   simulation_results[mx, "mean_perc_ext_final"] <- NA
          #                      (metapop_results[1,mx,] - mean(metapop_results[yrs_total,mx,]))/metapop_results[1,mx,]*100
                              
             simulation_results[mx, "mean_no_patches_final"] <- 
                              mean(EMA[,mx,length(BEMDEM$years_projections),2])      
-                             
+                           
                                                                         
               for(yx_tx in 1:yrs_total) 
                        {   

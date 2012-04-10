@@ -2,10 +2,10 @@
 \alias{Hmontana}
 \docType{data}
 \title{
-A species object (array) to carry out demographic modelling.
+A species object (list) to carry out demographic modelling.
 }
 \description{
-It was made from the demoniche_setup function. See the example file and the manual for further details.
+It was made from the \code{demoniche_setup function}. See the example file and the manual for further details.
 }
 \usage{data(Hmontana)}
 \format{

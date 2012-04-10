@@ -5,13 +5,12 @@ function(Matrix_projection, Matrix_projection_var,
                 transition_affected_env, env_stochas_type, yx_tx)
 {
 
-      
      			prob_scenario_noise <-
             c(prob_scenario[prev_mx[yx_tx]] * noise
             , 1- (prob_scenario[prev_mx[yx_tx]] * noise)) 
                    
                      rand_mxs     <- sample(1:2, 1, prob = prob_scenario_noise, replace = TRUE) 
-                     one_mxs      <- Matrix_projection[,rand_mxs]    # select one matrix
+                     one_mxs      <- Matrix_projection[,rand_mxs]    # select one matrix rand_mxs = 1
                            prev_mx[yx_tx+1]    <- rand_mxs # saves the choice of matrix
               
               ## Modify the chosen matrix with habitat suitability values and demographic stochasticity
@@ -43,17 +42,20 @@ function(Matrix_projection, Matrix_projection_var,
             A <- 
             matrix(one_mxs, ncol = length(n), nrow = length(n), byrow = FALSE)            
                  
-                #To check if surivial and persistence sum to more than one.
-#                     Atest <- A
-#                       # If seed stage remove the number of seeds. 
-#                    Atest[1,][-1] <- 0 # Remove number of recruits.
-#            # colSums(Atest)
-#            to_reduce <-     colSums (Atest[,(colSums(Atest) > 1)])
-#             Atested <- (Atest[,(colSums(Atest) > 1)] )/ to_reduce
-#            # colSums(Atested)
-#            A[-1,colSums(Atest) > 1] <- Atested[-1,] # the new A, <1
-#          
-            n <- as.vector( A %*% n )                          # Matrix multiplication!
+          # To check if surivial and persistence columns sum to more than one.
+                   Atest <- A
+                   Atest[1,][-1] <- 0 # Remove number of recruits.
+                              #  colSums(Atest)
+           if (sum(colSums(Atest) > 1)){
+             for(zerox in which(colSums(Atest) > 1) ) # zerox = 5
+             {
+            Atest[,zerox] <- Atest[,zerox] / sum(Atest[,zerox])
+             }
+             A[-1,] <- Atest[-1,] # the new A, <1
+            } # end if
+        
+
+         n <- as.vector( A %*% n )                          # Matrix multiplication!
                     
             n <- floor(n) # If the number of individuals is less than one, replace with zero
    

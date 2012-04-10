@@ -220,10 +220,10 @@ BEMDEM <- list(Orig_Populations = Populations, Niche_ID = Niche_ID, Niche_values
         years_projections = years_projections, 
         matrices = matrices, matrices_var = matrices_var, prob_scenario = prob_scenario, noise = noise,
         stages = stages, proportion_initial = proportion_initial, density_individuals = 
-        density_individuals, 
+        density_individuals, fraction_LDD = fraction_LDD,
         fraction_SDD = fraction_SDD, dispersal_probabilities = dispersal_probabilities, 
         dist_latlong = dist_latlong,
-        neigh_index = neigh_index, fraction_LDD = fraction_LDD, no_yrs = no_yrs, K = K, Kweight = Kweight,
+        neigh_index = neigh_index,  no_yrs = no_yrs, K = K, Kweight = Kweight,
         populationmax_all = populationmax_all, n0_all = n0_all, list_names_matrices = list_names_matrices,
         sumweight = sumweight, transition_affected_env = transition_affected_env, 
         transition_affected_niche = transition_affected_niche, transition_affected_demogr = 
