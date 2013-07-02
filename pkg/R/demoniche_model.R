@@ -219,7 +219,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
                        
                     form <- as.formula(paste(paste(colnames(pop)[-c(1:2)],collapse="+"),"X+Y",sep="~"))    
                                                
-			       jpeg(file = paste(getwd(), "/", foldername, "/map_",
+			       jpeg(filename = paste(getwd(), "/", foldername, "/map_",
                             BEMDEM$list_names_matrices[mx], ".jpeg", sep = ""))
                     print(levelplot(form, pop, col.regions=rev(heat.colors(100)), allow.multiple = TRUE, 
                             main = paste("Distribution", foldername, BEMDEM$list_names_matrices[mx], sep = "_")))
@@ -292,7 +292,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
 
 ######## PLOTS ################ 
 # plot EMAS
-    jpeg(file = paste(getwd(), "/", foldername, "/EMAs.jpeg", sep = ""), 
+    jpeg(filename = paste(getwd(), "/", foldername, "/EMAs.jpeg", sep = ""), 
         width = 580, height = 480)
       #  matplot(t(simulation_results[, 8:(7+length(BEMDEM$years_projections))]), pch = 15, type = "l")
         for(mx in 1:length(BEMDEM$list_names_matrices)) 
@@ -319,7 +319,7 @@ for (rx in 1:repetitions)           # tx = 1   rx = 1
     dev.off()
 
 #### plot population results     
-          jpeg(file = paste(getwd(), "/", foldername, "/population_results.jpeg", sep = ""), 
+          jpeg(filename = paste(getwd(), "/", foldername, "/population_results.jpeg", sep = ""), 
               width = 580, height = 480)
         for(mx in 1:length(BEMDEM$list_names_matrices)) 
             {

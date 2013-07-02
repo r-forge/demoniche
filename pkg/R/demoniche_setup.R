@@ -5,7 +5,7 @@ function(modelname, Populations, stages,
                       transition_affected_niche = FALSE, transition_affected_env = FALSE,
                        transition_affected_demogr = FALSE, env_stochas_type = "normal", 
                      noise = 1, fraction_SDD = FALSE, 
-                      fraction_LDD = FALSE, dispersal_constants = FALSE,
+                      fraction_LDD = FALSE, dispersal_constants = c(0.7, 0.7, 0.1, 3),
                        no_yrs, Ktype = "ceiling", K = NULL, Kweight = FALSE, sumweight = FALSE)
 {  
       require(sp)
@@ -188,12 +188,10 @@ function(modelname, Populations, stages,
           }      
       
      
-      if(fraction_LDD != FALSE)
-        {
         dist_latlong <- round(as.matrix(dist(Niche_ID[,2:3])), 1)                   
        # find populations that are neighboring 
         neigh_index <- sort(unique(as.numeric(dist_latlong)))[2:3]         
-        }          
+     
   
    if(sumweight[1] == "all_stages") sumweight <- rep(1, length(proportion_initial))
    if(Kweight[1] == "FALSE") Kweight <- rep(1, length(proportion_initial))

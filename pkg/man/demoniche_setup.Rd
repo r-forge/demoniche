@@ -9,12 +9,12 @@ The first step used for modelling spatially-explicit demographic dynamics requir
 }
 \usage{
 demoniche_setup(modelname, Populations, stages,
-                Nichemap = "oneperiod", matrices, matrices_var, prob_scenario = c(0.5, 0.5),
+                Nichemap = "oneperiod", matrices, matrices_var = FALSE, prob_scenario = c(0.5, 0.5),
                 proportion_initial, density_individuals,
                 transition_affected_niche = FALSE, transition_affected_env = FALSE,
                 transition_affected_demogr = FALSE, env_stochas_type = "normal", 
                 noise = 1, fraction_SDD = FALSE, 
-                fraction_LDD = FALSE, dispersal_constants = FALSE,
+                fraction_LDD = FALSE, dispersal_constants = c(0.7, 0.7, 0.1, 3),
                 no_yrs, Ktype = "ceiling", K = NULL, Kweight = FALSE, sumweight = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
